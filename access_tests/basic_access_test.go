@@ -1,4 +1,4 @@
-package tests
+package access_tests
 
 import (
 	"testing"
