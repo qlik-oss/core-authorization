@@ -1,0 +1,81 @@
+# Possible _actions:
+
+# create, update, delete, read
+
+# reload, publish, copy, import, export, exportdata
+
+ 
+
+# Permit all operations on this node
+
+resource._resourcetype = "node" and resource._actions={"*"}
+
+ 
+
+## Owner can always read the app
+
+resource.owner = user and resource._actions={"read"}
+
+ 
+
+## The owner of a resource should be able to do Update and Delete _actions if the resource is not published
+
+resource.owner = user and resource.published = "false" and resource._actions={"update", "delete"}
+
+ 
+
+## Admins has full access to all resources
+
+user.role = "admin" and resource._actions = {"*"}
+
+ 
+
+## Deny all but admins to change the security classed attributes
+
+user.role != "admin" and resource._denyattributes = {"owner", "group", "role"} and resource._actions=""
+
+ 
+
+## View users
+
+## can see published apps that belongs to a group that the user is part of
+
+resource._resourcetype = "App" and resource.published = "true" and resource.stream = user.org and resource._actions = "read"
+
+resource._resourcetype = "App.Object" and resource.published = "true" and resource.app.stream = user.org and resource._actions = "read"
+
+ 
+
+## Data engineers
+
+## are allowed to do CRUD and reload on unpublished owner apps
+
+## not allowed to publish apps
+
+user.role = "dataeditor" and resource._resourcetype = "App" and resource.published = "false" and resource.owner = user and resource._actions = {"create", "import", "export", "reload"}
+
+user.role = "dataeditor" and resource._resourcetype = "App.Object" and resource.app.HasPrivilege("update") and resource._actions = {"create"}
+user.role = "dataeditor" and resource._resourcetype = "App.Object" and resource.app.HasPrivilege("import") and resource._actions = {"import"}
+ 
+
+## Self service users
+
+## are allowed to create
+
+user.role = "selfservice" and resource._resourcetype = "App" and resource._actions={"publish"}
+
+user.role = "selfservice" and resource._resourcetype = "App" and resource.published = "false" and resource.owner = user and resource._actions = {"create", "reload"}
+
+user.role = "selfservice" and resource._resourcetype = "App.Object" and resource.app.HasPrivilege("update") and resource._actions = {"create"}
+
+user.role = "selfservice" and resource._resourcetype = "App.Object" and resource.published="true" and resource.stream = user.org and resource._actions = {"publish"}
+
+user.role = "selfservice" and resource._resourcetype = "App.Object" and resource.published = "false" and resource.owner = user and resource._actions = {"*"}
+
+## Copy only users
+## are allowed to copy but not create
+user.role = "copyonly" and resource._resourcetype = "App" and resource._actions={"read", "duplicate"}
+
+## Readandimport user
+## are allowed to import app
+user.role = "readandimport" and resource._resourcetype = {"App", "App.Object"} and resource._actions={"read", "import"}

@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+  engine1:
+    image: qlikcore/engine:12.171.0
+    restart: always
+    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=secret -S DocumentDirectory=/docs -S SystemAllowRulePath=/rules/rules_allow.txt
+    ports:
+      - "9071:9076"
+    volumes:
+      - ./docs:/docs
+      - ./rules:/rules
+  engine2:
+    image: qlikcore/engine:12.171.0
+    restart: always
+    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=secret -S DocumentDirectory=/docs -S SystemAllowRulePath=/rules/rules_full_access.txt
+    ports:
+      - "9072:9076"
+    volumes:
+      - ./docs:/docs
+      - ./rules:/rules
+  engine3:
+    image: qlikcore/engine:12.171.0
+    restart: always
+    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=secret -S DocumentDirectory=/docs -S SystemAllowRulePath=/rules/rules_static.txt
+    ports:
+      - "9073:9076"
+    volumes:
+      - ./docs:/docs
+      - ./rules:/rules
+
+
+
+

@@ -1,0 +1,1 @@
+resource._resourcetype = {"node","app", "app.object"} and resource._actions="*"
