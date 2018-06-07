@@ -18,7 +18,7 @@ docker-compose up -d
 Run the test cases using
 
 ```bash
-go test -v ./access_tests
+go test -v ./access
 ```
 
 

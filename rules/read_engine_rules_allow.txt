@@ -1,0 +1,2 @@
+user.role = "admin"
+resource._resourcetype = {"app", "app.object"} and resource._actions = "read"

@@ -1,34 +1,31 @@
 version: "3.3"
 
 services:
-  engine1:
+  read-engine:
     image: qlikcore/engine:12.171.0
     restart: always
-    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=secret -S DocumentDirectory=/docs -S SystemAllowRulePath=/rules/rules_allow.txt
+    command: >
+      -S AcceptEULA=${ACCEPT_EULA}
+      -S ValidateJsonWebTokens=2
+      -S JsonWebTokenSecret=secret
+      -S DocumentDirectory=/data
+      -S SystemAllowRulePath=/rules/read_engine_rules_allow.txt
     ports:
-      - "9071:9076"
+      - "9176:9076"
     volumes:
-      - ./docs:/docs
+      - ./data:/data
       - ./rules:/rules
-  engine2:
+  reload-engine:
     image: qlikcore/engine:12.171.0
     restart: always
-    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=secret -S DocumentDirectory=/docs -S SystemAllowRulePath=/rules/rules_full_access.txt
+    command: >
+      -S AcceptEULA=${ACCEPT_EULA}
+      -S ValidateJsonWebTokens=2
+      -S JsonWebTokenSecret=secret
+      -S DocumentDirectory=/data
+      -S SystemAllowRulePath=/rules/reload_engine_rules_allow.txt
     ports:
-      - "9072:9076"
+      - "9276:9076"
     volumes:
-      - ./docs:/docs
+      - ./data:/data
       - ./rules:/rules
-  engine3:
-    image: qlikcore/engine:12.171.0
-    restart: always
-    command: -S AcceptEULA=${ACCEPT_EULA} -S ValidateJsonWebTokens=2 -S JsonWebTokenSecret=secret -S DocumentDirectory=/docs -S SystemAllowRulePath=/rules/rules_static.txt
-    ports:
-      - "9073:9076"
-    volumes:
-      - ./docs:/docs
-      - ./rules:/rules
-
-
-
-
