@@ -1,31 +1,35 @@
 version: "3.3"
 
 services:
+
   read-engine:
     image: qlikcore/engine:12.171.0
+    container_name: read-engine
     restart: always
     command: >
       -S AcceptEULA=${ACCEPT_EULA}
+      -S Gen3=1
+      -S EnableABAC=1
+      -S EnableAccessControlTrace=1
       -S ValidateJsonWebTokens=2
       -S JsonWebTokenSecret=secret
-      -S DocumentDirectory=/data
       -S SystemAllowRulePath=/rules/read_engine_rules_allow.txt
     ports:
       - "9176:9076"
     volumes:
-      - ./data:/data
       - ./rules:/rules
-  reload-engine:
-    image: qlikcore/engine:12.171.0
-    restart: always
-    command: >
-      -S AcceptEULA=${ACCEPT_EULA}
-      -S ValidateJsonWebTokens=2
-      -S JsonWebTokenSecret=secret
-      -S DocumentDirectory=/data
-      -S SystemAllowRulePath=/rules/reload_engine_rules_allow.txt
-    ports:
-      - "9276:9076"
-    volumes:
-      - ./data:/data
-      - ./rules:/rules
+
+  # reload-engine:
+  #   image: qlikcore/engine:12.171.0
+  #   container_name: reload-engine
+  #   restart: always
+  #   command: >
+  #     -S AcceptEULA=${ACCEPT_EULA}
+  #     -S ValidateJsonWebTokens=2
+  #     -S JsonWebTokenSecret=secret
+  #     -S DocumentDirectory=/data
+  #     -S SystemAllowRulePath=/data/reload_engine_rules_allow.txt
+  #   ports:
+  #     - "9276:9076"
+  #   volumes:
+  #     - ./data:/data

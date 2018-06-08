@@ -2,6 +2,7 @@ package access
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -18,7 +19,8 @@ var (
 	ctx    = context.Background()
 )
 
-func accessEngineAppObject(engineURL string, docName string, objectID string, jwtClaims jwt.MapClaims) error {
+func connect(engineURL string, jwtClaims jwt.MapClaims) (*enigma.Global, error) {
+	ctx := context.Background()
 	headers := make(http.Header)
 
 	if jwtClaims != nil {
@@ -26,50 +28,50 @@ func accessEngineAppObject(engineURL string, docName string, objectID string, jw
 		headers.Set("Authorization", fmt.Sprintf("Bearer %s", signedJwt))
 	}
 
-	global, err := enigma.Dialer{TrafficDumpFile: trafficDumpFile}.Dial(ctx, engineURL, headers)
-	if err != nil {
-		return err
-	}
-	defer global.DisconnectFromServer()
-
-	doc, err := global.OpenDoc(ctx, docName, "", "", "", false)
-	if err != nil {
-		return err
-	}
-
-	countryListObject, err := doc.GetObject(ctx, objectID)
-	if err != nil {
-		return err
-	}
-
-	_, err = countryListObject.GetLayout(ctx)
-	return err
+	return enigma.Dialer{TrafficDumpFile: trafficDumpFile}.Dial(ctx, engineURL, headers)
 }
 
-func updateEngineAppObject(engineURL string, docName string, objectID string, jwtClaims jwt.MapClaims) error {
-	headers := make(http.Header)
+func createApp(global *enigma.Global, appName string) (string, error) {
+	_, appID, err := global.CreateApp(ctx, appName, "Main")
+	return appID, err
+}
 
-	if jwtClaims != nil {
-		signedJwt, _ := jwt.NewWithClaims(jwt.SigningMethodHS256, jwtClaims).SignedString(secret)
-		headers.Set("Authorization", fmt.Sprintf("Bearer %s", signedJwt))
+func openApp(global *enigma.Global, appName string) (*enigma.Doc, error) {
+	return global.OpenDoc(ctx, appName, "", "", "", false)
+}
+
+func createSheet(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
+	msg := json.RawMessage(`{
+		"title": "/title",
+		"description": "/description",
+		"meta": "/meta",
+		"order": "/order",
+		"type": "/qInfo/qType",
+		"id": "/qInfo/qId",
+		"lb": "/qListObjectDef",
+		"hc": "/qHyperCubeDef"
+	}`)
+
+	props := enigma.GenericObjectProperties{
+		Info: &enigma.NxInfo{Id: name, Type: "sheet"},
+		ChildListDef: &enigma.ChildListDef{
+			Data: msg,
+		},
 	}
 
-	global, err := enigma.Dialer{TrafficDumpFile: trafficDumpFile}.Dial(ctx, engineURL, headers)
+	return doc.CreateObject(ctx, &props)
+}
+
+func readSheetLayout(doc *enigma.Doc, name string) (*enigma.GenericObject, *enigma.GenericObjectLayout, error) {
+	object, err := doc.GetObject(ctx, name)
 	if err != nil {
-		return err
+		return nil, nil, err
 	}
-	defer global.DisconnectFromServer()
 
-	doc, err := global.OpenDoc(ctx, docName, "", "", "", false)
+	layout, err := object.GetLayout(ctx)
 	if err != nil {
-		return err
+		return object, nil, err
 	}
 
-	countryListObject, err := doc.GetObject(ctx, objectID)
-	if err != nil {
-		return err
-	}
-
-	_, err = countryListObject.GetLayout(ctx)
-	return err
+	return object, layout, err
 }

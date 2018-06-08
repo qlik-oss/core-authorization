@@ -1,2 +1,5 @@
-user.role = "admin"
-resource._resourcetype = {"app", "app.object"} and resource._actions = "read"
+# Users with the role "admin" can do any action.
+user.roles = {"admin"} && resource._actions = "*"
+
+# All users can read both documents and object in documents.
+resource._resourcetype = {"app", "app.object"} and resource._actions = {"read"}
