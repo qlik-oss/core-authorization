@@ -4,3 +4,4 @@
 
 vendor/
 traffic-dump.json
+*.test

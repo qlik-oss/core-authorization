@@ -19,6 +19,7 @@ var (
 	ctx    = context.Background()
 )
 
+// connect connects to an engine at the proviced URL and claims.
 func connect(engineURL string, jwtClaims jwt.MapClaims) (*enigma.Global, error) {
 	ctx := context.Background()
 	headers := make(http.Header)
@@ -31,15 +32,17 @@ func connect(engineURL string, jwtClaims jwt.MapClaims) (*enigma.Global, error) 
 	return enigma.Dialer{TrafficDumpFile: trafficDumpFile}.Dial(ctx, engineURL, headers)
 }
 
-func createApp(global *enigma.Global, appName string) (string, error) {
-	_, appID, err := global.CreateApp(ctx, appName, "Main")
-	return appID, err
+// createApp creates an app using the provided Global object and app name.
+func createApp(global *enigma.Global, appName string) (*enigma.Doc, error) {
+	return global.CreateDocEx(ctx, appName, "", "", "", "Main")
 }
 
+// openApp opens an app using the providad Global object and app name.
 func openApp(global *enigma.Global, appName string) (*enigma.Doc, error) {
 	return global.OpenDoc(ctx, appName, "", "", "", false)
 }
 
+// createSheet creates a sheet object using the provided Doc objecgt and sheet name.
 func createSheet(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
 	msg := json.RawMessage(`{
 		"title": "/title",
@@ -62,16 +65,7 @@ func createSheet(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
 	return doc.CreateObject(ctx, &props)
 }
 
-func readSheetLayout(doc *enigma.Doc, name string) (*enigma.GenericObject, *enigma.GenericObjectLayout, error) {
-	object, err := doc.GetObject(ctx, name)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	layout, err := object.GetLayout(ctx)
-	if err != nil {
-		return object, nil, err
-	}
-
-	return object, layout, err
+// getSheetObject returns a sheet in the proviced Doc object with the provided name.
+func getSheetObject(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
+	return doc.GetObject(ctx, name)
 }
