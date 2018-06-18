@@ -3,7 +3,7 @@ user.allowCreate && resource._actions = {"read", "update", "create"}
 
 # 
 user.allowReload && resource._resourcetype = {"app"} and resource._actions = {"read", "reload", "update"}
-user.allowReload && resource._resourcetype = {"app.object"} and resource._actions = {"read", "create", "reload", "update"}
+user.allowReload && resource._resourcetype = {"app.object"} and resource._actions = {"read", "create", "update"}
 
 # 
 user.allowView && resource._resourcetype = {"app", "app.object"} and resource._actions = {"read"}
