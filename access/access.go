@@ -43,7 +43,7 @@ func openApp(global *enigma.Global, appID string) (*enigma.Doc, error) {
 	return global.OpenDoc(ctx, appID, "", "", "", false)
 }
 
-// createSheet creates a sheet object using the provided Doc objecgt and sheet name.
+// createSheet creates and returns a sheet object.
 func createSheet(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
 	msg := json.RawMessage(`{
 		"title": "/title",
@@ -66,12 +66,12 @@ func createSheet(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
 	return doc.CreateObject(ctx, &props)
 }
 
-// readObject returns ...
+// readObject reads and returns the document object with the provided name.
 func readObject(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
 	return doc.GetObject(ctx, name)
 }
 
-// reloadMoviesData ...
+// reloadMoviesData reloads movies data from a CSV file into the provided document.
 func reloadMoviesData(doc *enigma.Doc) error {
 	const script = "LOAD * FROM '/data/movies.csv' (txt, embedded labels, delimiter is ',', no quotes);"
 	var (
@@ -95,7 +95,7 @@ func reloadMoviesData(doc *enigma.Doc) error {
 	return nil
 }
 
-// createMoviesObject ...
+// createMoviesObject creates and returns a document object to hold movies data.
 func createMoviesObject(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
 	props := &enigma.GenericObjectProperties{
 		Info: &enigma.NxInfo{Id: name, Type: "movies"},
@@ -123,6 +123,7 @@ func createMoviesObject(doc *enigma.Doc, name string) (*enigma.GenericObject, er
 	return obj, nil
 }
 
+// readMovies reads and returns two slices containing the titles and release years of the loaded movies data.
 func readMoviesData(obj *enigma.GenericObject) (titles []string, years []float64, err error) {
 	var layout *enigma.GenericObjectLayout
 

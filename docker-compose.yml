@@ -35,3 +35,9 @@ services:
     volumes:
       - ./data:/data
       - ./rules:/rules
+
+  test-runner:
+    build: .
+    depends_on:
+      - empty-engine
+      - reload-engine
