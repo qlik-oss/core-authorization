@@ -9,4 +9,4 @@ jobs:
       - setup_remote_docker
       - run:
           name: Run tests
-          command: ACCEPT_EULA=yes docker-compose run testrunner
+          command: ACCEPT_EULA=yes docker-compose run test-runner
