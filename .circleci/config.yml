@@ -1,0 +1,12 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.10      
+    working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+    steps:
+      - checkout
+    - setup_remote_docker
+      - run:
+          name: Run tests
+          command: ACCEPT_EULA=yes docker-compose run testrunner
