@@ -1,0 +1,16 @@
+
+[prune]
+  go-tests = true
+  unused-packages = true
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/qlik-oss/enigma-go"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/stretchr/testify"
+
+[[constraint]]
+  version = "v3.2.0"
+  name = "github.com/dgrijalva/jwt-go"
