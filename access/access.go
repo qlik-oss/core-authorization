@@ -2,7 +2,6 @@ package access
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -41,29 +40,6 @@ func createApp(global *enigma.Global, appName string) (*enigma.Doc, error) {
 // openApp opens an app using the providad Global object and app name.
 func openApp(global *enigma.Global, appID string) (*enigma.Doc, error) {
 	return global.OpenDoc(ctx, appID, "", "", "", false)
-}
-
-// createSheet creates and returns a sheet object.
-func createSheet(doc *enigma.Doc, name string) (*enigma.GenericObject, error) {
-	msg := json.RawMessage(`{
-		"title": "/title",
-		"description": "/description",
-		"meta": "/meta",
-		"order": "/order",
-		"type": "/qInfo/qType",
-		"id": "/qInfo/qId",
-		"lb": "/qListObjectDef",
-		"hc": "/qHyperCubeDef"
-	}`)
-
-	props := enigma.GenericObjectProperties{
-		Info: &enigma.NxInfo{Id: name, Type: "sheet"},
-		ChildListDef: &enigma.ChildListDef{
-			Data: msg,
-		},
-	}
-
-	return doc.CreateObject(ctx, &props)
 }
 
 // readObject reads and returns the document object with the provided name.
