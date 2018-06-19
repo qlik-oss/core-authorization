@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/qlik-oss/core-authorization.svg?style=svg)](https://circleci.com/gh/qlik-oss/core-authorization)
+
 # Qlik Core Authorization Examples
 
 This repo contains running examples showing how to configure Qlik Associative Engine for ABAC rule evaluation, and
