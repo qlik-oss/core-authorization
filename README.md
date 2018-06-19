@@ -46,7 +46,7 @@ To perform operations that shall either be granted or denied towards, functions 
 library to communicate with the engine instances.
 
 To verify the expected behavior, the file [access_test.go](./access/access_test.go) contains Go test cases that call
-the access functions with different claims based on which user that access the engine. Each test case verifies that
+the access functions with different claims based on which user that accesses the engine. Each test case verifies that
 operations are properly granted or denied.
 
 ## Running
