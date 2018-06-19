@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/qlik-oss/core-authorization.svg?style=svg)](https://circleci.com/gh/qlik-oss/core-authorization)
+[![CircleCI](https://circleci.com/gh/qlik-oss/core-authorization.svg?style=shield)](https://circleci.com/gh/qlik-oss/core-authorization)
 
 # Qlik Core Authorization Examples
 
