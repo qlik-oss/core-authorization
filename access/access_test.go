@@ -18,7 +18,6 @@ const (
 	emptyEngineURL  = "ws://empty-engine:9076"
 	reloadEngineURL = "ws://reload-engine:9076"
 	appName         = "APP01"
-	sheetID         = "SHEET01"
 	moviesID        = "MOVIES01"
 )
 
@@ -54,7 +53,6 @@ var (
 var testState struct {
 	global *enigma.Global
 	app    *enigma.Doc
-	sheet  *enigma.GenericObject
 	movies *enigma.GenericObject
 	appID  string
 }
@@ -72,7 +70,7 @@ func TestAccessEmptyEngine(t *testing.T) {
 		// Run test cases for admin user.
 		t.Run("admin user should be able to create app", testCanCreateApp)
 		t.Run("admin user should be able to open app", testCanOpenApp)
-		t.Run("admin user should be able to create sheet", testCanCreateSheet)
+		t.Run("admin user should be able to create object", testCanCreateObject)
 	}()
 
 	func() {
@@ -83,8 +81,8 @@ func TestAccessEmptyEngine(t *testing.T) {
 
 		// Run test cases for non-admin user.
 		t.Run("non-admin user should be able to open app", testCanOpenApp)
-		t.Run("non-admin user should be able to read sheet", testCanReadSheet)
-		t.Run("non-admin user should not be able to create sheet", testCannotCreateSheet)
+		t.Run("non-admin user should be able to read object", testCanReadObject)
+		t.Run("non-admin user should not be able to create object", testCannotCreateObject)
 		t.Run("non-admin user should bot be able to create app", testCannotCreateApp)
 	}()
 }
@@ -101,7 +99,7 @@ func TestAccessReloadEngine(t *testing.T) {
 
 		// Run test cases for user with create access.
 		t.Run("user with create access should be able to create app", testCanCreateApp)
-		t.Run("user with create access should be able to create movies object", testCanCreateMoviesObject)
+		t.Run("user with create access should be able to create movies object", testCanCreateObject)
 		t.Run("user with create access should not be able to reload app", testCannotReloadApp)
 	}()
 
@@ -127,9 +125,9 @@ func TestAccessReloadEngine(t *testing.T) {
 		// Run test cases for user with view access.
 		t.Run("user with view access should not be able to create app", testCannotCreateApp)
 		t.Run("user with view access should be able to open app", testCanOpenApp)
-		t.Run("user with view access should be able to read movies object", testCanReadMoviesObject)
-		t.Run("user with view access should be able to read movies data", testCanReadMoviesData)
-		t.Run("user with view access should not be able to create sheet", testCannotCreateSheet)
+		t.Run("user with view access should be able to read movies object", testCanReadObject)
+		t.Run("user with view access should be able to read movies data", testCanReadObjectData)
+		t.Run("user with view access should not be able to create object", testCannotCreateObject)
 		t.Run("user with view access should not be able to reload app", testCannotReloadApp)
 	}()
 }
@@ -160,42 +158,27 @@ func testCanSaveApp(t *testing.T) {
 	require.NoError(t, err)
 }
 
-// testCanCreateSheet verifies that the current user can create a sheet object.
-func testCanCreateSheet(t *testing.T) {
-	testState.sheet, err = createSheet(testState.app, sheetID)
-	require.NoError(t, err)
-
-	err = testState.app.SaveObjects(ctx)
-	require.NoError(t, err)
-}
-
-// testCanCreateSheet verifies that the current user is not allowed to create a sheet object.
-func testCannotCreateSheet(t *testing.T) {
-	_, err = createSheet(testState.app, sheetID)
-	require.Error(t, err)
-	require.Contains(t, strings.ToLower(err.Error()), "access denied")
-}
-
-// testCanReadSheet verifies that the current user can read a sheet object.
-func testCanReadSheet(t *testing.T) {
-	testState.sheet, err = readObject(testState.app, sheetID)
-	require.NoError(t, err)
-}
-
-// testCanCreateMoviesObject verifies that the current user can create a custom movies object.
-func testCanCreateMoviesObject(t *testing.T) {
+// testCanCreateObject verifies that the current user can create a custom movies object.
+func testCanCreateObject(t *testing.T) {
 	testState.movies, err = createMoviesObject(testState.app, moviesID)
 	require.NoError(t, err)
 }
 
-// testCanReadMoviesObject verifies that the current user can read a custom movies object.
-func testCanReadMoviesObject(t *testing.T) {
+// testCannotCreateObject verifies that the current user is not allowed to create a custom object.
+func testCannotCreateObject(t *testing.T) {
+	_, err = createMoviesObject(testState.app, moviesID)
+	require.Error(t, err)
+	require.Contains(t, strings.ToLower(err.Error()), "access denied")
+}
+
+// testCanReadObject verifies that the current user can read a custom movies object.
+func testCanReadObject(t *testing.T) {
 	testState.movies, err = readObject(testState.app, moviesID)
 	require.NoError(t, err)
 }
 
-// testCanReadMoviesData verifies that the current user can read data in a custom movies object.
-func testCanReadMoviesData(t *testing.T) {
+// testCanReadObjectData verifies that the current user can read data in a custom movies object.
+func testCanReadObjectData(t *testing.T) {
 	var (
 		titles []string
 		years  []float64
