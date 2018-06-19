@@ -2,7 +2,7 @@
 user.allowCreate && resource._actions = {"read", "update", "create"}
 
 # Users with "reload" permissions can read, reload, and update.
-# The "create" action must be granted on "app.object" since ...
+# NOTE: Currently, the "create" action must be granted on "app.object". Later, this shall not be needed.
 user.allowReload && resource._resourcetype = {"app"} and resource._actions = {"read", "reload", "update"}
 user.allowReload && resource._resourcetype = {"app.object"} and resource._actions = {"read", "create", "update"}
 
