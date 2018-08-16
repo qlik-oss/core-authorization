@@ -3,7 +3,7 @@ version: "3.3"
 services:
 
   empty-engine:
-    image: qlikcore/engine:12.193.0
+    image: qlikcore/engine:12.215.0
     container_name: empty-engine
     restart: always
     command: >
