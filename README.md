@@ -5,7 +5,7 @@
 This repo contains running examples showing how to configure Qlik Associative Engine for ABAC rule evaluation, and
 examples on how some basic rules can be written.
 
-The [Qlik Core](https://qlikcore.com/) documentation provides more in-depth technical documentation on how rules are
+The [Qlik Core](https://core.qlik.com/) documentation provides more in-depth technical documentation on how rules are
 written and how the Qlik Associative Engine is configured for ABAC rule evalutaion. It is recommended to use that
 documentation along with these examples.
 
@@ -55,7 +55,7 @@ operations are properly granted or denied.
 
 Running the tests is containerized. [Docker](https://www.docker.com/) and
 [docker-compose](https://docs.docker.com/compose/) are required to run the tests. The
-[End-User License Agreement](https://qlikcore.com/beta/) must be read and accepted.
+[End-User License Agreement](https://core.qlik.com/eula/) must be read and accepted.
 
 Assuming that the current working directory is the repo root, set the `ACCEPT_EULA` environment variable as
 appropriate and run the tests with:
