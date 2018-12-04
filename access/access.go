@@ -34,7 +34,14 @@ func connect(engineURL string, jwtClaims jwt.MapClaims) (*enigma.Global, error) 
 
 // createApp creates an app using the provided Global object and app name.
 func createApp(global *enigma.Global, appName string) (*enigma.Doc, error) {
-	return global.CreateDocEx(ctx, appName, "", "", "", "Main")
+	success, appName, err := global.CreateApp(ctx, appName, "Main")
+	if err != nil {
+		return nil, err
+	}
+	if !success {
+		return nil, errors.New("Failed to create app")
+	}
+	return global.OpenDoc(ctx, appName, "", "", "", false)
 }
 
 // openApp opens an app using the providad Global object and app name.
