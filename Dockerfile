@@ -1,4 +1,4 @@
-FROM golang:1.13-alpine
+FROM golang:1.14-alpine
 
 WORKDIR /go/src/github.com/qlik-oss/core-authorization/
 COPY . /go/src/github.com/qlik-oss/core-authorization/
