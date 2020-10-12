@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/qlik-oss/core-authorization.svg?style=svg)](https://circleci.com/gh/qlik-oss/core-authorization)
 
+*As of 1 July 2020, Qlik Core is no longer available to new customers. No further maintenance will be done in this repository.*
+
 This repo contains running examples showing how to configure Qlik Associative Engine for ABAC rule evaluation, and
 examples on how some basic rules can be written.
 
